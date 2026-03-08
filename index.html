@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Raunak Parihar</title>
+
+<style>
+
+body{
+font-family: Arial;
+margin:0;
+background: linear-gradient(135deg,#000428,#004e92);
+color:white;
+text-align:center;
+}
+
+h1{
+font-size:50px;
+padding:20px;
+}
+
+#search{
+padding:10px;
+width:300px;
+border-radius:10px;
+border:none;
+margin-bottom:20px;
+}
+
+.container{
+display:grid;
+grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
+gap:20px;
+padding:20px;
+}
+
+.card{
+background:rgba(255,255,255,0.1);
+border-radius:15px;
+padding:15px;
+transition:0.3s;
+}
+
+.card:hover{
+transform:scale(1.08);
+background:rgba(255,255,255,0.2);
+}
+
+img{
+width:80px;
+margin:10px;
+}
+
+</style>
+</head>
+
+<body>
+
+<h1>Raunak Parihar</h1>
+
+<input type="text" id="search" placeholder="Search country">
+
+<div class="container" id="countries"></div>
+
+<script>
+
+let container = document.getElementById("countries");
+
+fetch("https://restcountries.com/v3.1/all")
+.then(res=>res.json())
+.then(data=>{
+
+data.forEach(country=>{
+
+let currency="N/A";
+
+if(country.currencies){
+currency=Object.values(country.currencies)[0].name;
+}
+
+let card=document.createElement("div");
+
+card.className="card";
+
+card.innerHTML=`
+
+<h2>${country.name.common}</h2>
+
+<img src="${country.flags.png}">
+
+<p><b>Capital:</b> ${country.capital}</p>
+
+<p><b>Currency:</b> ${currency}</p>
+
+`;
+
+container.appendChild(card);
+
+});
+
+});
+
+</script>
+
+</body>
+</html>
