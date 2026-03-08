@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Raunak Parihar</title>
+
+<style>
+
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+font-family:Arial;
+}
+
+body{
+background:linear-gradient(135deg,#0f2027,#203a43,#2c5364);
+color:white;
+text-align:center;
+}
+
+h1{
+font-size:50px;
+margin:30px;
+letter-spacing:3px;
+}
+
+.searchbox{
+margin-bottom:30px;
+}
+
+input{
+padding:12px;
+width:320px;
+border-radius:25px;
+border:none;
+outline:none;
+font-size:16px;
+}
+
+.container{
+display:grid;
+grid-template-columns:repeat(auto-fit,minmax(250px,1fr));
+gap:25px;
+padding:30px;
+}
+
+.card{
+background:rgba(255,255,255,0.08);
+border-radius:20px;
+padding:20px;
+backdrop-filter:blur(10px);
+transition:0.4s;
+}
+
+.card:hover{
+transform:translateY(-10px) scale(1.05);
+background:rgba(255,255,255,0.2);
+}
+
+img{
+width:90px;
+margin:10px 0;
+border-radius:6px;
+}
+
+p{
+margin:5px;
+font-size:15px;
+}
+
+</style>
+</head>
+
+<body>
+
+<h1>Raunak Parihar</h1>
+
+<div class="searchbox">
+<input type="text" id="search" placeholder="Search Country">
+</div>
+
+<div class="container" id="countries"></div>
+
+<script>
+
+let countriesContainer=document.getElementById("countries")
+let search=document.getElementById("search")
+
+let countriesData=[]
+
+fetch("https://restcountries.com/v3.1/all")
+.then(res=>res.json())
+.then(data=>{
+
+countriesData=data
+displayCountries(data)
+
+})
+
+function displayCountries(data){
+
+countriesContainer.innerHTML=""
+
+data.forEach(country=>{
+
+let currency="N/A"
+
+if(country.currencies){
+currency=Object.values(country.currencies)[0].name
+}
+
+let capital=country.capital?country.capital[0]:"N/A"
+
+let card=document.createElement("div")
+
+card.className="card"
+
+card.innerHTML=`
+
+<h2>${country.name.common}</h2>
+
+<img src="${country.flags.png}">
+
+<p><b>Capital:</b> ${capital}</p>
+
+<p><b>Currency:</b> ${currency}</p>
+
+<p><b>Population:</b> ${country.population.toLocaleString()}</p>
+
+`
+
+countriesContainer.appendChild(card)
+
+})
+
+}
+
+search.addEventListener("input",()=>{
+
+let value=search.value.toLowerCase()
+
+let filtered=countriesData.filter(country=>
+country.name.common.toLowerCase().includes(value)
+)
+
+displayCountries(filtered)
+
+})
+
+</script>
+
+</body>
+</html>
